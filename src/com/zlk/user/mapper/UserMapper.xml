@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlk.user.mapper.UserMapper">
+
+    <resultMap id="userEntityMap" type="com.zlk.user.entity.User">
+        <id property="uid" column="uid" javaType="java.lang.String"></id>
+        <result property="name" column="name" javaType="java.lang.String"></result>
+        <result property="pwd" column="pwd" javaType="java.lang.String"></result>
+        <result property="phone" column="phone" javaType="java.lang.String"></result>
+        <result property="createTime" column="create_time" javaType="java.util.Date"></result>
+        <result property="updateTime" column="update_time" javaType="java.util.Date"></result>
+    </resultMap>
+    <sql id="columnFiled">
+        select uid,name,pwd,phone,create_time,update_time from user
+    </sql>
+    <select id="findUserByNameAndPwd" parameterType="com.zlk.user.entity.User" resultMap="userEntityMap">
+        <include refid="columnFiled"></include>
+        where name = #{name} and pwd = #{pwd}
+    </select>
+    <select id="findUserList" parameterType="com.zlk.user.entity.Pagination" resultMap="userEntityMap">
+        <include refid="columnFiled"></include>
+        limit #{startPage},#{pageSize}
+    </select>
+    <select id="findUserCount" parameterType="com.zlk.user.entity.Pagination" resultType="java.lang.Integer">
+        select count(1) from user
+    </select>
+    <select id="findUserById" parameterType="java.lang.String"  resultMap="userEntityMap">
+        <include refid="columnFiled"></include>
+        where uid = #{uid}
+    </select>
+    <update id="updateUserById" parameterType="com.zlk.user.entity.User">
+        update user set name= #{name} ,phone = #{phone},update_time = #{updateTime} where uid = #{uid}
+    </update>
+</mapper>
